@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Post List</h1>
+    <ul id="post-list"></ul>
+
+    <script>
+        $(document).ready(function() {
+            // API 엔드포인트 URL
+            var apiUrl = 'http://localhost:8000/api/posts/';
+        
+            // API 요청 및 데이터 표시
+            $.get(apiUrl, function(data) {
+                var postList = data.results;
+                var $postList = $('#post-list');
+        
+                // 각 포스트 데이터를 처리하여 목록에 추가
+                postList.forEach(function(post) {
+                    var $postItem = $('<li>').appendTo($postList);
+                    $('<h2>').text(post.title).appendTo($postItem);
+                    $('<p>').text(post.content).appendTo($postItem);
+                    
+                    // 댓글 목록 표시
+                    var $commentList = $('<ul>').appendTo($postItem);
+                    post.comment.forEach(function(comment) {
+                        var $commentItem = $('<li>').appendTo($commentList);
+                        $('<p>').text(comment.content).appendTo($commentItem);
+                    });
+                });
+            });
+        });
+        </script>
+        
+</body>
+</html>
